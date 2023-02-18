@@ -104,3 +104,12 @@ class Y {
 assert.throws(() => {
     JSON.parse(JSON.stringify(new Y('y'), replacer), reviver);
 }, new Error('Invalid mapping for Y'));
+
+import { execFile } from 'child_process';
+
+execFile('node', ['example.js'], (error, stdout, stderr) => {
+    if (error) {
+        console.error(error);
+        process.exit(1);
+    }
+});

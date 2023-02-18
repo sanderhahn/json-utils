@@ -68,13 +68,13 @@ export const Reviver = (mapping) => {
                 ]);
                 return new Map(entries);
             }
-            if (value.constructor) {
+            if (typeof value.constructor === 'string') {
                 const Constructor = mapping[value.constructor];
                 if (Constructor === undefined ||
                     typeof mapping[value.constructor].fromJSON !== 'function') {
                     throw new Error(`Invalid mapping for ${value.constructor}`);
                 }
-                return mapping[value.constructor].fromJSON(value); 
+                return mapping[value.constructor].fromJSON(value);
             }
         }
         if (isDateString(value)) {
