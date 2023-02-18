@@ -66,9 +66,9 @@ assert.equal(
     1n,
 );
 
-const dateResult = JSON.parse(JSON.stringify(new Date('2023-02-18')), reviver);
-assert(dateResult instanceof Date)
-assert.equal(dateResult.toISOString(), '2023-02-18T00:00:00.000Z');
+const dateValue = JSON.parse(JSON.stringify(new Date('2023-02-18')), reviver);
+assert(dateValue instanceof Date)
+assert.equal(dateValue.toISOString(), '2023-02-18T00:00:00.000Z');
 
 assert.deepStrictEqual(
     reviver(null, replacer(null, exampleSet)),
@@ -83,3 +83,24 @@ assert.deepStrictEqual(
 const xValue = JSON.parse(JSON.stringify(new X('x'), replacer), reviver);
 assert(xValue instanceof X);
 assert.equal(xValue.x, 'x');
+
+const nestedValue = JSON.parse(JSON.stringify(new X(new X('x')), replacer), reviver);
+assert(nestedValue instanceof X);
+assert(nestedValue.x instanceof X);
+assert.equal(nestedValue.x.x, 'x');
+
+class Y {
+    constructor(y) {
+        this.y = y;
+    }
+    toJSON() {
+        return {
+            constructor: this.constructor.name,
+            y: this.y,
+        };
+    }
+}
+
+assert.throws(() => {
+    JSON.parse(JSON.stringify(new Y('y'), replacer), reviver);
+}, new Error('Invalid mapping for Y'));

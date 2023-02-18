@@ -11,13 +11,6 @@ export const replacer = (key, value) => {
             value: `${value}`,
         };
     }
-    // if (value
-    //     && typeof value.toJSON === 'function') {
-    //     return {
-    //         constructor: value.constructor.name,
-    //         value: value.toJSON(),
-    //     };
-    // }
     if (value instanceof Set
         || value instanceof WeakSet) {
         return {
@@ -75,8 +68,12 @@ export const Reviver = (mapping) => {
                 ]);
                 return new Map(entries);
             }
-            if (mapping[value.constructor] &&
-                typeof mapping[value.constructor].fromJSON === 'function') {
+            if (value.constructor) {
+                const Constructor = mapping[value.constructor];
+                if (Constructor === undefined ||
+                    typeof mapping[value.constructor].fromJSON !== 'function') {
+                    throw new Error(`Invalid mapping for ${value.constructor}`);
+                }
                 return mapping[value.constructor].fromJSON(value); 
             }
         }

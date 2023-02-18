@@ -2,13 +2,16 @@
 
 Utility `replacer` and `reviver` functions for `JSON.stringify` and `JSON.parse`.
 
-JSON support for:
+These add support for:
 
 - `Symbol`
 - `BigInt`
 - `Date`
+
+and collections and custom objects:
+
 - `Set`
 - `Map`
-- custom encode/decode using `toJSON` and static `fromJSON` methods
+- class using `toJSON` and static `fromJSON` methods
 
-See [`example.js`](example.js) for an example script.
+See the [`example.js`](example.js).

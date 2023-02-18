@@ -16,7 +16,7 @@ function throttle(func, wait = 1000) {
 
 function watcher(event, filename) {
     console.clear();
-    const proc = spawn('node', ['index.test.js']);
+    const proc = spawn('node', ['index_test.js']);
     proc.stdout.on('data', function (data) {
         process.stdout.write(data.toString());
     });

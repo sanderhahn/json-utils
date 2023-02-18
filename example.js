@@ -1,17 +1,25 @@
-import { replacer, Reviver } from 'json-utils';
+import { replacer, Reviver } from './index.js';
 
-class X {
-    constructor(y) {
-        this.y = y;
+class Color {
+    constructor(red, green, blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
     }
     toJSON() {
         return {
             constructor: this.constructor.name,
-            y: this.y,
+            red: this.red,
+            green: this.green,
+            blue: this.blue,
         };
     }
     static fromJSON(value) {
-        return new X(value.y);
+        return new Color(
+            value.red,
+            value.green,
+            value.blue,
+        );
     }
 }
 
@@ -21,11 +29,11 @@ const str = JSON.stringify({
     date: new Date('2023-02-18'),
     set: new Set([1, 2]),
     map: new Map([['a', 'b']]),
-    custom: new X('z'),
+    sky: new Color(202, 235, 242),
 }, replacer, 2);
 
 const reviver = Reviver({
-    X: X,
+    Color: Color,
 });
 
 const obj = JSON.parse(str, reviver);
@@ -39,5 +47,5 @@ console.dir(obj);
 //     date: 2023-02-18T00:00:00.000Z,
 //     set: Set(2) { 1, 2 },
 //     map: Map(1) { 'a' => 'b' },
-//     custom: X { y: 'z' }
+//     sky: Color { red: 202, green: 235, blue: 242 }
 // }
