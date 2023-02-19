@@ -67,7 +67,7 @@ assert.equal(
 );
 
 const dateValue = JSON.parse(JSON.stringify(new Date('2023-02-18')), reviver);
-assert(dateValue instanceof Date)
+assert.ok(dateValue instanceof Date)
 assert.equal(dateValue.toISOString(), '2023-02-18T00:00:00.000Z');
 
 assert.deepStrictEqual(
@@ -81,12 +81,12 @@ assert.deepStrictEqual(
 );
 
 const xValue = JSON.parse(JSON.stringify(new X('x'), replacer), reviver);
-assert(xValue instanceof X);
+assert.ok(xValue instanceof X);
 assert.equal(xValue.x, 'x');
 
 const nestedValue = JSON.parse(JSON.stringify(new X(new X('x')), replacer), reviver);
-assert(nestedValue instanceof X);
-assert(nestedValue.x instanceof X);
+assert.ok(nestedValue instanceof X);
+assert.ok(nestedValue.x instanceof X);
 assert.equal(nestedValue.x.x, 'x');
 
 class Y {
@@ -110,6 +110,26 @@ import { execFile } from 'child_process';
 execFile('node', ['example.js'], (error, stdout, stderr) => {
     if (error) {
         console.error(error);
+        process.exit(1);
+    }
+});
+
+import * as os from 'os';
+
+function isWindows() {
+    return os.platform() === 'win32';
+}
+
+function npm() {
+    if (isWindows()) {
+        return 'npm.cmd';
+    }
+    return 'npm';
+}
+
+execFile(npm(), ['exec', 'tsc'], (error, stdout, stderr) => {
+    if (error) {
+        console.log(stdout);
         process.exit(1);
     }
 });

@@ -1,17 +1,20 @@
 import { replacer, Reviver } from './index.js';
 
 class Color {
+    #red
+    #green
+    #blue
     constructor(red, green, blue) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
+        this.#red = red;
+        this.#green = green;
+        this.#blue = blue;
     }
     toJSON() {
         return {
             constructor: this.constructor.name,
-            red: this.red,
-            green: this.green,
-            blue: this.blue,
+            red: this.#red,
+            green: this.#green,
+            blue: this.#blue,
         };
     }
     static fromJSON(value) {

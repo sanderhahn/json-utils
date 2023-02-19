@@ -25,8 +25,13 @@ function watcher(event, filename) {
     });
 
     proc.on('exit', function (code) {
-        if (code) {
-            console.log('child process exited with code ' + code.toString());
+        if (code === null) {
+            throw new Error('internal error');
+        }
+        if (code === 0) {
+            console.log('testing successful');
+        } else {
+            console.error('testing failed');
         }
     });
 }
