@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "noEmit": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "target": "es2020",
+    "moduleResolution": "node",
+    "paths": {
+      "json-utils": ["./index.js"],
+    },
+  },
+}

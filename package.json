@@ -11,8 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-  },
   "type": "module",
-  "exports": "./index.js"
+  "exports": "./index.js",
+  "devDependencies": {
+    "@types/node": "^18.14.0"
+  }
 }

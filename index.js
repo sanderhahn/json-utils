@@ -11,16 +11,14 @@ export const replacer = (key, value) => {
             value: `${value}`,
         };
     }
-    if (value instanceof Set
-        || value instanceof WeakSet) {
+    if (value instanceof Set) {
         return {
             constructor: value.constructor.name,
             value: Array.from(value.values())
                 .map((value) => replacer(undefined, value)),
         };
     }
-    if (value instanceof Map
-        || value instanceof WeakMap) {
+    if (value instanceof Map) {
         return {
             constructor: value.constructor.name,
             value: Array.from(value.entries())

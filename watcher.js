@@ -1,10 +1,9 @@
-import { spawn } from "child_process";
-import { watch } from "fs";
+import { spawn } from 'child_process';
+import { watch } from 'fs';
 
-const start = Date.now();
 function throttle(func, wait = 1000) {
     let timer;
-    return (...args) => {
+    return function (...args) {
         if (timer === undefined) {
             func.apply(this, args);
             timer = setTimeout(() => {
@@ -26,7 +25,9 @@ function watcher(event, filename) {
     });
 
     proc.on('exit', function (code) {
-        console.log('child process exited with code ' + code.toString());
+        if (code) {
+            console.log('child process exited with code ' + code.toString());
+        }
     });
 }
 
