@@ -1,38 +1,43 @@
 import * as assert from 'assert';
-import { replacer, Reviver } from 'json-utils';
+import { replacer, Reviver } from './index.js';
+import { npm } from './npm.js';
 
 class X {
-    constructor(x) {
+    x: any;
+    constructor(x: any) {
         this.x = x;
     }
-    toJSON() {
+    toJSON(): {
+        constructor: string,
+        x: any,
+    } {
         return {
             constructor: this.constructor.name,
             x: this.x,
         };
     }
-    static fromJSON(value) {
+    static fromJSON(value): X {
         return new X(value.x);
     }
 }
 
-assert.deepStrictEqual(replacer(null, Symbol.for('x')), {
+assert.deepStrictEqual(replacer('', Symbol.for('x')), {
     constructor: 'Symbol',
     value: 'x',
 });
 
-assert.deepStrictEqual(replacer(null, 1n), {
+assert.deepStrictEqual(replacer('', 1n), {
     constructor: 'BigInt',
     value: '1',
 });
 
-assert.deepStrictEqual(replacer(null, BigInt('1')), {
+assert.deepStrictEqual(replacer('', BigInt('1')), {
     constructor: 'BigInt',
     value: '1',
 });
 
 const exampleSet = new Set([1, new Set([2])]);
-assert.deepStrictEqual(replacer(null, exampleSet), {
+assert.deepStrictEqual(replacer('', exampleSet), {
     constructor: 'Set',
     value: [1, {
         constructor: 'Set',
@@ -41,7 +46,7 @@ assert.deepStrictEqual(replacer(null, exampleSet), {
 });
 
 const exampleMap = new Map([[new Set([1]), new Map([['a', 'b']])]]);
-assert.deepStrictEqual(replacer(null, exampleMap), {
+assert.deepStrictEqual(replacer('', exampleMap), {
     constructor: 'Map',
     value: [[{
         constructor: 'Set',
@@ -57,12 +62,12 @@ const reviver = Reviver({
 });
 
 assert.equal(
-    reviver(null, replacer(null, Symbol.for('x'))),
+    reviver('', replacer('', Symbol.for('x'))),
     Symbol.for('x'),
 );
 
 assert.equal(
-    reviver(null, replacer(null, 1n)),
+    reviver('', replacer('', 1n)),
     1n,
 );
 
@@ -71,12 +76,12 @@ assert.ok(dateValue instanceof Date)
 assert.equal(dateValue.toISOString(), '2023-02-18T00:00:00.000Z');
 
 assert.deepStrictEqual(
-    reviver(null, replacer(null, exampleSet)),
+    reviver('', replacer('', exampleSet)),
     exampleSet,
 );
 
 assert.deepStrictEqual(
-    reviver(null, replacer(null, exampleMap)),
+    reviver('', replacer('', exampleMap)),
     exampleMap,
 );
 
@@ -90,6 +95,7 @@ assert.ok(nestedValue.x instanceof X);
 assert.equal(nestedValue.x.x, 'x');
 
 class Y {
+    y: any;
     constructor(y) {
         this.y = y;
     }
@@ -105,31 +111,28 @@ assert.throws(() => {
     JSON.parse(JSON.stringify(new Y('y'), replacer), reviver);
 }, new Error('Invalid mapping for Y'));
 
-import { execFile } from 'child_process';
-
-execFile('node', ['example.js'], (error, stdout, stderr) => {
-    if (error) {
-        console.error(error);
-        process.exit(1);
-    }
-});
-
-import * as os from 'os';
-
-function isWindows() {
-    return os.platform() === 'win32';
-}
-
-function npm() {
-    if (isWindows()) {
-        return 'npm.cmd';
-    }
-    return 'npm';
-}
-
-execFile(npm(), ['exec', 'tsc'], (error, stdout, stderr) => {
+execFile(npm(), ['run', 'build'], (error, stdout, stderr) => {
     if (error) {
         console.log(stdout);
         process.exit(1);
     }
+});
+
+import { execFile } from 'child_process';
+
+execFile('node', ['dist/example.js'], (error, stdout, stderr) => {
+    if (error) {
+        console.error(error);
+        process.exit(1);
+    }
+
+    assert.strictEqual(stdout, `{
+  symbol: Symbol(one),
+  bignum: 1n,
+  date: 2023-02-18T00:00:00.000Z,
+  set: Set(2) { 1, 2 },
+  map: Map(1) { 'a' => 'b' },
+  sky: Color {}
+}
+`)
 });

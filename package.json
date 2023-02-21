@@ -2,18 +2,26 @@
   "name": "json-utils",
   "version": "1.0.0",
   "description": "",
-  "main": "watcher.js",
+  "main": "src/index.ts",
   "scripts": {
-    "example": "node example.js",
-    "watch": "node watcher.js",
-    "test": "node index.test.js"
+    "build": "tsc",
+    "example": "npm-run-all build example:run",
+    "example:run": "node dist/example.js",
+    "watch": "npm-run-all build watch:run",
+    "watch:run": "node dist/watcher.js",
+    "test": "npm-run-all build test:run",
+    "test:run": "node dist/index_test.js",
+    "x": "cross-env ZZ=zz node test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
-  "exports": "./index.js",
+  "exports": "./index.ts",
   "devDependencies": {
-    "@types/node": "^18.14.0"
+    "@types/node": "^18.14.0",
+    "cross-env": "^7.0.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^4.9.5"
   }
 }

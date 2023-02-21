@@ -1,4 +1,4 @@
-export const replacer = (key, value) => {
+export const replacer = (key: string, value: any): any => {
     if (typeof value === 'symbol') {
         return {
             constructor: 'Symbol',
@@ -15,7 +15,7 @@ export const replacer = (key, value) => {
         return {
             constructor: value.constructor.name,
             value: Array.from(value.values())
-                .map((value) => replacer(undefined, value)),
+                .map((value) => replacer(key, value)),
         };
     }
     if (value instanceof Map) {
@@ -23,15 +23,15 @@ export const replacer = (key, value) => {
             constructor: value.constructor.name,
             value: Array.from(value.entries())
                 .map(([key, value]) => [
-                    replacer(undefined, key),
-                    replacer(undefined, value),
+                    replacer(key, key),
+                    replacer(key, value),
                 ]),
         };
     }
     return value;
 };
 
-const isDateString = (value) => {
+const isDateString = (value: string): boolean => {
     return typeof value === 'string'
         && value.length === 24
         && value[4] === '-'
@@ -41,10 +41,10 @@ const isDateString = (value) => {
         && value[16] === ':'
         && value[19] === '.'
         && value[23] === 'Z';
-}
+};
 
-export const Reviver = (mapping) => {
-    const reviver = (key, value) => {
+export const Reviver = (mapping: {[key: string]: any}) => {
+    const reviver = (key: string, value: any): any => {
         if (typeof value === 'object') {
             if (value.constructor === 'Symbol') {
                 return Symbol.for(value.value);
@@ -56,13 +56,13 @@ export const Reviver = (mapping) => {
                 return new Date(value.value);
             }
             if (value.constructor === 'Set') {
-                const entries = value.value.map((value) => reviver(null, value));
+                const entries = value.value.map((value) => reviver(key, value));
                 return new Set(entries);
             }
             if (value.constructor === 'Map') {
                 const entries = value.value.map(([key, value]) => [
-                    reviver(null, key),
-                    reviver(null, value),
+                    reviver(key, key),
+                    reviver(key, value),
                 ]);
                 return new Map(entries);
             }

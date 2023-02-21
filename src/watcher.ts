@@ -1,11 +1,14 @@
 import { spawn } from 'child_process';
-import { watch } from 'fs';
+import { watch, WatchEventType } from 'fs';
+import { npm } from './npm.js';
 
-function throttle(func, wait = 1000) {
+type TrottleFn = <T>(...T) => void;
+
+function throttle(func: TrottleFn, wait = 5000): TrottleFn {
     let timer;
     return function (...args) {
         if (timer === undefined) {
-            func.apply(this, args);
+            func.bind(this)(...args);
             timer = setTimeout(() => {
                 timer = undefined;
             }, wait);
@@ -13,9 +16,15 @@ function throttle(func, wait = 1000) {
     };
 }
 
-function watcher(event, filename) {
+function watcher(event: WatchEventType, filename: string | Buffer): void {
     console.clear();
-    const proc = spawn('node', ['index_test.js']);
+    const proc = spawn(npm(), ['run', 'test'], {
+        env: {
+            OS: process.env.OS,
+            PATH: process.env.PATH,
+            PATHEXT: process.env.PATHEXT,
+        },
+    });
     proc.stdout.on('data', function (data) {
         process.stdout.write(data.toString());
     });
@@ -37,4 +46,4 @@ function watcher(event, filename) {
 }
 
 console.clear();
-watch('.', { recursive: true }, throttle(watcher, 1000));
+watch('./src', { recursive: true }, throttle(watcher, 5000));

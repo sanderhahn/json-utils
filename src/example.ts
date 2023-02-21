@@ -1,15 +1,20 @@
 import { replacer, Reviver } from './index.js';
 
 class Color {
-    #red
-    #green
-    #blue
-    constructor(red, green, blue) {
+    #red: number;
+    #green: number;
+    #blue: number;
+    constructor(red: number, green: number, blue: number) {
         this.#red = red;
         this.#green = green;
         this.#blue = blue;
     }
-    toJSON() {
+    toJSON(): {
+        constructor: string,
+        red: number,
+        green: number,
+        blue: number,
+    } {
         return {
             constructor: this.constructor.name,
             red: this.#red,
@@ -17,7 +22,13 @@ class Color {
             blue: this.#blue,
         };
     }
-    static fromJSON(value) {
+    static fromJSON(
+        value: {
+            red: number,
+            green: number,
+            blue: number,
+        },
+    ): Color {
         return new Color(
             value.red,
             value.green,
@@ -32,8 +43,8 @@ const str = JSON.stringify({
     date: new Date('2023-02-18'),
     set: new Set([1, 2]),
     map: new Map([['a', 'b']]),
-    sky: new Color(202, 235, 242),
-}, replacer, 2);
+    sky: new Color(202, 235, 241),
+}, replacer);
 
 const reviver = Reviver({
     Color: Color,

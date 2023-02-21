@@ -1,14 +1,18 @@
 {
+  "include": [
+    "src",
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+  ],
   "compilerOptions": {
-    "checkJs": true,
-    "noEmit": true,
     "strict": true,
     "noImplicitAny": false,
     "noImplicitThis": false,
-    "target": "es2020",
+    "target": "ES2022",
     "moduleResolution": "node",
-    "paths": {
-      "json-utils": ["./index.js"],
-    },
+    "declaration": true,
+    "outDir": "./dist",
   },
 }
