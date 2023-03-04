@@ -53,11 +53,11 @@ export const Reviver = (mapping: {[key: string]: any}) => {
                 return BigInt(value.value);
             }
             if (value.constructor === 'Set') {
-                const entries = value.value.map((value) => reviver(key, value));
+                const entries = value.value.map((value: any) => reviver(key, value));
                 return new Set(entries);
             }
             if (value.constructor === 'Map') {
-                const entries = value.value.map(([key, value]) => [
+                const entries = value.value.map(([key, value]: [any, any]) => [
                     reviver(key, key),
                     reviver(key, value),
                 ]);

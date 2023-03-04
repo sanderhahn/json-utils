@@ -10,7 +10,7 @@
     "watch": "npm-run-all build watch:run",
     "watch:run": "node dist/watcher.js",
     "test": "npm-run-all build test:run",
-    "test:run": "node dist/index_test.js",
+    "test:run": "node dist/json-utils.test.js",
     "typedoc": "typedoc src/index.ts"
   },
   "keywords": [],

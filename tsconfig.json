@@ -8,8 +8,6 @@
   ],
   "compilerOptions": {
     "strict": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
     "target": "ES2022",
     "moduleResolution": "node",
     "declaration": true,

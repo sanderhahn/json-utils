@@ -1,4 +1,4 @@
-import { replacer, Reviver } from './index.js';
+import { replacer, Reviver } from './json-utils.js';
 
 class Color {
     #red: number;

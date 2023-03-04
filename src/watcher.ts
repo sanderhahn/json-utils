@@ -2,11 +2,11 @@ import { spawn } from 'child_process';
 import { watch, WatchEventType } from 'fs';
 import { npm } from './npm.js';
 
-type TrottleFn = <T>(...T) => void;
+type TrottleFn = (...args: any[]) => void;
 
 function throttle(func: TrottleFn, wait = 5000): TrottleFn {
-    let timer;
-    return function (...args) {
+    let timer: NodeJS.Timeout | undefined;
+    return function (this: any, ...args) {
         if (timer === undefined) {
             func.bind(this)(...args);
             timer = setTimeout(() => {

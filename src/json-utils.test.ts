@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { replacer, Reviver } from './index.js';
+import { replacer, Reviver } from './json-utils.js';
 import { npm } from './npm.js';
 
 class X {
@@ -16,7 +16,7 @@ class X {
             x: this.x,
         };
     }
-    static fromJSON(value): X {
+    static fromJSON(value: {x: any}): X {
         return new X(value.x);
     }
 }
@@ -96,7 +96,7 @@ assert.equal(nestedValue.x.x, 'x');
 
 class Y {
     y: any;
-    constructor(y) {
+    constructor(y: any) {
         this.y = y;
     }
     toJSON() {
