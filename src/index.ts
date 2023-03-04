@@ -52,9 +52,6 @@ export const Reviver = (mapping: {[key: string]: any}) => {
             if (value.constructor === 'BigInt') {
                 return BigInt(value.value);
             }
-            if (value.constructor === 'Date') {
-                return new Date(value.value);
-            }
             if (value.constructor === 'Set') {
                 const entries = value.value.map((value) => reviver(key, value));
                 return new Set(entries);
