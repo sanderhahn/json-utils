@@ -11,7 +11,7 @@
     "watch:run": "node dist/watcher.js",
     "test": "npm-run-all build test:run",
     "test:run": "node dist/index_test.js",
-    "x": "cross-env ZZ=zz node test.js"
+    "typedoc": "typedoc src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +22,7 @@
     "@types/node": "^18.14.0",
     "cross-env": "^7.0.3",
     "npm-run-all": "^4.1.5",
+    "typedoc": "^0.23.26",
     "typescript": "^4.9.5"
   }
 }
