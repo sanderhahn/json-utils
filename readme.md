@@ -14,4 +14,4 @@ and collections and custom objects:
 - `Map`
 - class using `toJSON` and static `fromJSON` methods
 
-See the [`example.js`](example.js).
+See `src/example.ts` in the repo.

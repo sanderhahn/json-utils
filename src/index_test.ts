@@ -1,5 +1,5 @@
 import * as assert from 'assert';
-import { replacer, Reviver } from './json-utils.js';
+import { replacer, Reviver } from './index.js';
 import { npm } from './npm.js';
 
 class X {
